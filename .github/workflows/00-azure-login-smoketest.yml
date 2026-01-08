@@ -21,6 +21,14 @@ jobs:
           client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Check secrets are visible (safe)
+        run: |
+          set -e
+          [ -n "${{ secrets.AZURE_CLIENT_ID }}" ] && echo "AZURE_CLIENT_ID present" || (echo "::error::AZURE_CLIENT_ID missing" && exit 1)
+          [ -n "${{ secrets.AZURE_TENANT_ID }}" ] && echo "AZURE_TENANT_ID present" || (echo "::error::AZURE_TENANT_ID missing" && exit 1)
+          [ -n "${{ secrets.AZURE_CLIENT_SECRET }}" ] && echo "AZURE_CLIENT_SECRET present" || (echo "::error::AZURE_CLIENT_SECRET missing" && exit 1)
+          [ -n "${{ secrets.AZURE_SUBSCRIPTION_ID }}" ] && echo "AZURE_SUBSCRIPTION_ID present" || (echo "::error::AZURE_SUBSCRIPTION_ID missing" && exit 1)
+
       - name: Verify Azure context
         uses: azure/CLI@v2
         with:
